@@ -11,7 +11,6 @@ type PressStateMachineStates =
 
 class PressStateMachine {
   state: PressStateMachineStates;
-  retries: number = 5;
   switchbot: Switchbot | null;
   device: any | null;
   handlers: {
@@ -22,6 +21,7 @@ class PressStateMachine {
   constructor(
     readonly id: string,
     readonly wait_ms: number,
+    private retries: number,
     readonly debug: boolean
   ) {
     this.switchbot = new Switchbot();
@@ -99,10 +99,12 @@ class PressStateMachine {
     if (this.debug) {
       console.log(`Fail with '${msg}' (${this.retries} retries left)`);
     }
+
     this.retries -= 1;
-    if (this.retries == 0) {
+    if (this.retries < 0) {
       return "error";
     }
+
     return this.state;
   }
 }
@@ -112,6 +114,7 @@ export function add_press(program: Command) {
     .command("press <id>")
     .description("Make Switchbot press button")
     .option("-t, --time <millisecs>", "time to wait in ms", "400")
+    .option("-r, --retries <n>", "Maximum number of retries", "5")
     .action((id, options) => {
       const dbg = program.opts().debug;
 
@@ -119,7 +122,9 @@ export function add_press(program: Command) {
       if (dbg) {
         console.log(`Press device ${id} for ${wait_time}ms`);
       }
-      const sm = new PressStateMachine(id, wait_time, dbg);
+      const retries = parseInt(options.retries);
+
+      const sm = new PressStateMachine(id, wait_time, retries, dbg);
       sm.run()
         .then(() => {
           process.exit(0);

@@ -15,11 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.add_press = void 0;
 const node_switchbot_1 = __importDefault(require("node-switchbot"));
 class PressStateMachine {
-    constructor(id, wait_ms, debug) {
+    constructor(id, wait_ms, retries, debug) {
         this.id = id;
         this.wait_ms = wait_ms;
+        this.retries = retries;
         this.debug = debug;
-        this.retries = 5;
         this.switchbot = new node_switchbot_1.default();
         this.device = null;
         this.handlers = {
@@ -93,7 +93,7 @@ class PressStateMachine {
             console.log(`Fail with '${msg}' (${this.retries} retries left)`);
         }
         this.retries -= 1;
-        if (this.retries == 0) {
+        if (this.retries < 0) {
             return "error";
         }
         return this.state;
@@ -104,13 +104,15 @@ function add_press(program) {
         .command("press <id>")
         .description("Make Switchbot press button")
         .option("-t, --time <millisecs>", "time to wait in ms", "400")
+        .option("-r, --retries <n>", "Maximum number of retries", "5")
         .action((id, options) => {
         const dbg = program.opts().debug;
         const wait_time = parseInt(options.time) || 10;
         if (dbg) {
             console.log(`Press device ${id} for ${wait_time}ms`);
         }
-        const sm = new PressStateMachine(id, wait_time, dbg);
+        const retries = parseInt(options.retries);
+        const sm = new PressStateMachine(id, wait_time, retries, dbg);
         sm.run()
             .then(() => {
             process.exit(0);
