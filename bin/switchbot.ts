@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 import { program } from "commander";
 import { add_scan } from "../src/scan";
 import { add_press } from "../src/press";
