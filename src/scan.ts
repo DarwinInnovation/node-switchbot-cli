@@ -33,7 +33,7 @@ async function switchbotScan(wait_secs: number) {
   // Wait 10 seconds
   await switchbot.wait(wait_secs * 1000);
   switchbot.stopScan();
-  process.stdout.write("\r");
+  process.stdout.write("\n");
 
   return devices;
 }

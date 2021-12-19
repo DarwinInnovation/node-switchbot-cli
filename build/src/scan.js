@@ -28,7 +28,7 @@ function switchbotScan(wait_secs) {
         // Wait 10 seconds
         yield switchbot.wait(wait_secs * 1000);
         switchbot.stopScan();
-        process.stdout.write("\r");
+        process.stdout.write("\n");
         return devices;
     });
 }
