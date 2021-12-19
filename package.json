@@ -1,8 +1,11 @@
 {
   "name": "@darwin-innovation/switchbot-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "build/bin/switchbot.js",
+  "bin": {
+    "switchbot": "build/bin/switchbot.js"
+  },
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
