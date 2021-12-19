@@ -1,6 +1,6 @@
 {
   "name": "@darwin-innovation/switchbot-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "build/bin/switchbot.js",
   "bin": {
@@ -15,11 +15,11 @@
   "license": "ISC",
   "dependencies": {
     "@abandonware/noble": "^1.9.2-15",
-    "commander": "^8.3.0"
+    "commander": "^8.3.0",
+    "node-switchbot": "^1.1.2"
   },
   "devDependencies": {
     "@types/node": "^16.11.12",
-    "node-switchbot": "^1.1.2",
     "prettier": "^2.5.0",
     "typescript": "^4.5.3"
   },
